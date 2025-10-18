@@ -1,6 +1,6 @@
 # VueWork - Team Tasks & Scheduling App
 
-![CI Status](https://github.com/alamalik/my-project.github.io/workflows/CI/badge.svg)
+![CI Status](https://github.com/yourusername/vuework/workflows/CI/badge.svg)
 
 ## 📋 Problem Statement
 
@@ -67,7 +67,7 @@ This project will NOT include:
 - **Code Quality**: ESLint + Prettier
 - **Testing**: Vitest (unit) + Cypress (e2e)
 - **CI/CD**: GitHub Actions
-- **Deployment**: GitHub Pages
+- **Deployment**: Netlify / Vercel
 
 ## 🚀 Getting Started
 
@@ -80,8 +80,8 @@ This project will NOT include:
 
 ```bash
 # Clone the repository
-git clone https://github.com/alamalik/my-project.github.io.git
-cd my-project.github.io
+git clone https://github.com/yourusername/vuework.git
+cd vuework
 
 # Install dependencies
 npm install
@@ -102,35 +102,43 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors
 npm run format       # Format code with Prettier
 npm run test:unit    # Run unit tests
+npm run test:e2e     # Run end-to-end tests
 ```
 
 ## 📁 Project Structure
 
 ```
-my-project.github.io/
+vuework/
 ├── src/
 │   ├── assets/          # Images, fonts, global styles
 │   ├── components/      # Reusable Vue components
+│   │   ├── common/      # Buttons, Inputs, Modals
 │   │   ├── layout/      # Header, Footer, Sidebar
-│   │   └── common/      # Buttons, Inputs, Modals
+│   │   └── features/    # Task cards, Project cards
 │   ├── views/           # Page components
 │   │   ├── HomeView.vue
-│   │   ├── AboutView.vue
-│   │   └── ProjectsView.vue
+│   │   ├── ProjectsView.vue
+│   │   ├── BoardView.vue
+│   │   ├── CalendarView.vue
+│   │   └── AdminView.vue
 │   ├── stores/          # Pinia state stores
-│   │   └── counter.js
+│   │   ├── auth.js
+│   │   ├── projects.js
+│   │   └── tasks.js
 │   ├── router/          # Vue Router configuration
 │   │   └── index.js
+│   ├── services/        # API service layer
+│   │   └── api.js
+│   ├── composables/     # Reusable composition functions
+│   ├── utils/           # Helper functions
 │   ├── App.vue          # Root component
 │   └── main.js          # Application entry point
 ├── public/              # Static assets
 ├── tests/               # Test files
 ├── docs/                # Documentation and wireframes
-│   └── wireframes/      # UI wireframes
-├── .github/
-│   └── workflows/       # CI/CD workflows
 ├── .env.example         # Environment variables template
 ├── .eslintrc.cjs        # ESLint configuration
 ├── .prettierrc          # Prettier configuration
@@ -156,6 +164,9 @@ Run tests before committing:
 # Unit tests
 npm run test:unit
 
+# E2E tests
+npm run test:e2e
+
 # Coverage report
 npm run test:coverage
 ```
@@ -164,9 +175,9 @@ npm run test:coverage
 
 The app is automatically deployed on push to the `main` branch via GitHub Actions.
 
-**Live URL**: [https://alamalik.github.io/my-project.github.io/](https://alamalik.github.io/my-project.github.io/)
+**Live URL**: [https://vuework.netlify.app](https://vuework.netlify.app) (coming soon)
 
-## 💻 Development Workflow
+## 👨‍💻 Development Workflow
 
 1. Create a new branch for each feature: `git checkout -b feature/task-board`
 2. Make your changes and commit: `git commit -m "Add task board component"`
@@ -180,7 +191,7 @@ This project is developed by a collaborative team of 3 students:
 
 ### Team Members
 
-**1. Ala Malik Ibrahim** (Repository Owner)
+**1. Ala Malik Ibrahim (Repository Owner)**
 - Role: Frontend Developer & Project Lead
 - GitHub: [@alamalik](https://github.com/alamalik)
 - Email: alamalik305@gmail.com
@@ -213,6 +224,7 @@ This is a student project. Feedback and suggestions are welcome! Open an issue o
 ---
 
 **Current Milestone**: 1 - Project Pitch & App Skeleton ✅  
-**Next Milestone**: 2 - Data Model & API Layer  
+**Next Milestone**: 2 - Data Model & API Layer
+
 **Course**: Web Development / Software Engineering  
-**Academic Year**: 2024-2025
+**Academic Year**: 2025-2026

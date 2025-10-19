@@ -64,7 +64,7 @@ const projectsStore = useProjectsStore()
 const stats = ref({
   projects: 0,
   tasks: 0,
-  users: 5
+  users: 5,
 })
 </script>
 

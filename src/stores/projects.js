@@ -11,7 +11,7 @@ export const useProjectsStore = defineStore('projects', () => {
       status: 'active',
       taskCount: 12,
       memberCount: 4,
-      createdAt: '2024-01-15'
+      createdAt: '2024-01-15',
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ export const useProjectsStore = defineStore('projects', () => {
       status: 'active',
       taskCount: 25,
       memberCount: 6,
-      createdAt: '2024-02-01'
+      createdAt: '2024-02-01',
     },
     {
       id: 3,
@@ -29,8 +29,8 @@ export const useProjectsStore = defineStore('projects', () => {
       status: 'completed',
       taskCount: 8,
       memberCount: 3,
-      createdAt: '2024-01-10'
-    }
+      createdAt: '2024-01-10',
+    },
   ])
 
   const loading = ref(false)
@@ -55,7 +55,7 @@ export const useProjectsStore = defineStore('projects', () => {
       taskCount: 0,
       memberCount: 1,
       status: 'active',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     }
     projects.value.push(newProject)
   }
@@ -106,6 +106,6 @@ export const useProjectsStore = defineStore('projects', () => {
     updateProject,
     deleteProject,
     getProjectById,
-    fetchProjects
+    fetchProjects,
   }
 })

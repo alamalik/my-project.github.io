@@ -2,9 +2,7 @@
   <div class="projects-view">
     <div class="header">
       <h1>Projects</h1>
-      <button class="btn btn-primary" @click="showCreateModal = true">
-        + New Project
-      </button>
+      <button class="btn btn-primary" @click="showCreateModal = true">+ New Project</button>
     </div>
 
     <div class="search-bar">
@@ -25,9 +23,7 @@
       <div class="icon">📁</div>
       <h2>No projects yet</h2>
       <p>Create your first project to get started</p>
-      <button class="btn btn-primary" @click="showCreateModal = true">
-        + Create Project
-      </button>
+      <button class="btn btn-primary" @click="showCreateModal = true">+ Create Project</button>
     </div>
 
     <div v-else class="projects-grid">
@@ -49,12 +45,40 @@
       </div>
     </div>
 
-    <!-- Create Project Modal (placeholder) -->
+    <!-- Create Project Modal -->
     <div v-if="showCreateModal" class="modal-overlay" @click="showCreateModal = false">
       <div class="modal" @click.stop>
         <h2>Create New Project</h2>
-        <p>Project creation form coming in Milestone 3</p>
-        <button class="btn btn-secondary" @click="showCreateModal = false">Close</button>
+
+        <form @submit.prevent="createProject">
+          <div class="form-group">
+            <label for="projectName">Project Name *</label>
+            <input
+              id="projectName"
+              v-model="newProject.name"
+              type="text"
+              placeholder="Enter project name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="projectDesc">Description</label>
+            <textarea
+              id="projectDesc"
+              v-model="newProject.description"
+              placeholder="Enter project description"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" @click="showCreateModal = false">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Create Project</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -72,17 +96,52 @@ const searchQuery = ref('')
 const loading = ref(false)
 const showCreateModal = ref(false)
 
+// Form data
+const newProject = ref({
+  name: '',
+  description: '',
+})
+
 const filteredProjects = computed(() => {
   if (!searchQuery.value) {
     return projectsStore.projects
   }
-  return projectsStore.projects.filter(project =>
-    project.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return projectsStore.projects.filter(
+    project =>
+      project.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 
 const goToBoard = projectId => {
   router.push({ name: 'project-board', params: { id: projectId } })
+}
+
+// Create new project
+function createProject() {
+  if (!newProject.value.name.trim()) {
+    alert('Please enter a project name')
+    return
+  }
+
+  const project = projectsStore.addProject({
+    name: newProject.value.name,
+    description: newProject.value.description,
+  })
+
+  // Reset form
+  newProject.value = { name: '', description: '' }
+  showCreateModal.value = false
+
+  // Navigate to the new project board
+  goToBoard(project.id)
+}
+
+function deleteProject(projectId, event) {
+  event.stopPropagation() // Prevent card click
+  if (confirm('Are you sure you want to delete this project?')) {
+    projectsStore.deleteProject(projectId)
+  }
 }
 </script>
 
@@ -298,6 +357,43 @@ const goToBoard = projectId => {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  .modal-actions button {
+    padding: 0.75rem 1.5rem;
   }
 }
 </style>

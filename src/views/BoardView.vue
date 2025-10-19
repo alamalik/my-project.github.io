@@ -37,6 +37,7 @@
     <div v-if="showModal" class="modal-overlay" @click="closeAddTaskModal">
       <div class="modal" @click.stop>
         <div class="modal-header">
+          10
           <h2>Add New Task</h2>
           <button class="close-btn" @click="closeAddTaskModal">✕</button>
         </div>
@@ -96,31 +97,32 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useTasksStore } from '../stores/tasks'
+import { useProjectsStore } from '../stores/projects'
 
 const route = useRoute()
+const router = useRouter()
 const tasksStore = useTasksStore()
-
-const project = ref({
-  id: route.params.id,
-  name: 'Sample Project',
-  description: 'This is a placeholder project board'
-})
+const projectsStore = useProjectsStore()
 
 const showModal = ref(false)
 const newTask = ref({
   title: '',
   description: '',
   priority: 'medium',
-  dueDate: ''
+  dueDate: '',
 })
 
-// Computed properties
-const projectTasks = computed(() =>
-  tasksStore.tasksByProject(parseInt(project.value.id))
-)
+// Get current project
+const project = computed(() => {
+  const proj = projectsStore.getProjectById(route.params.id)
+  return proj || { id: route.params.id, name: 'Project Not Found', description: '' }
+})
+
+// Get tasks for this project
+const projectTasks = computed(() => tasksStore.tasksByProject(parseInt(route.params.id)))
 
 // Methods
 function getTasksByStatus(status) {
@@ -131,7 +133,7 @@ function getStatusLabel(status) {
   const labels = {
     'to-do': 'To Do',
     'in-progress': 'In Progress',
-    'done': 'Done'
+    done: 'Done',
   }
   return labels[status]
 }
@@ -140,7 +142,7 @@ function getStatusIcon(status) {
   const icons = {
     'to-do': '📋',
     'in-progress': '⚡',
-    'done': '✅'
+    done: '✅',
   }
   return icons[status]
 }
@@ -149,7 +151,7 @@ function getEmptyMessage(status) {
   const messages = {
     'to-do': 'No tasks yet',
     'in-progress': 'No tasks in progress',
-    'done': 'No completed tasks'
+    done: 'No completed tasks',
   }
   return messages[status]
 }
@@ -164,7 +166,7 @@ function closeAddTaskModal() {
     title: '',
     description: '',
     priority: 'medium',
-    dueDate: ''
+    dueDate: '',
   }
 }
 
@@ -175,20 +177,45 @@ function submitTask() {
   }
 
   tasksStore.addTask({
-    projectId: parseInt(project.value.id),
+    projectId: parseInt(route.params.id),
     title: newTask.value.title,
     description: newTask.value.description,
     status: 'to-do',
     priority: newTask.value.priority,
     assignedTo: 1,
     dueDate: newTask.value.dueDate,
-    labels: []
+    labels: [],
   })
+
+  // Increment project task count
+  projectsStore.incrementTaskCount(parseInt(route.params.id))
 
   closeAddTaskModal()
 }
-</script>
 
+// Move task between columns
+function moveTaskToStatus(taskId, newStatus) {
+  tasksStore.moveTask(taskId, newStatus)
+}
+
+// Delete task
+function deleteTask(taskId, event) {
+  event.stopPropagation()
+  if (confirm('Are you sure you want to delete this task?')) {
+    tasksStore.deleteTask(taskId)
+    projectsStore.decrementTaskCount(parseInt(route.params.id))
+  }
+}
+
+// Check if project exists on mount
+onMounted(() => {
+  if (!projectsStore.getProjectById(route.params.id)) {
+    console.warn('Project not found, redirecting...')
+    // Optionally redirect to projects page
+    // router.push({ name: 'projects' })
+  }
+})
+</script>
 <style scoped>
 .board-view {
   max-width: 1400px;
@@ -501,6 +528,34 @@ h1 {
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+  .task-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .btn-move,
+  .btn-delete-task {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .btn-move:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+  }
+
+  .btn-delete-task:hover {
+    background: #ffebee;
+    transform: scale(1.1);
   }
 }
 </style>

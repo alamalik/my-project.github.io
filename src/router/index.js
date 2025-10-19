@@ -9,32 +9,32 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        title: 'Home - VueWork'
-      }
+        title: 'Home - VueWork',
+      },
     },
     {
       path: '/projects',
       name: 'projects',
       component: () => import('../views/ProjectsView.vue'),
       meta: {
-        title: 'Projects - VueWork'
-      }
+        title: 'Projects - VueWork',
+      },
     },
     {
       path: '/projects/:id',
       name: 'project-board',
       component: () => import('../views/BoardView.vue'),
       meta: {
-        title: 'Board - VueWork'
-      }
+        title: 'Board - VueWork',
+      },
     },
     {
       path: '/calendar',
       name: 'calendar',
       component: () => import('../views/CalendarView.vue'),
       meta: {
-        title: 'Calendar - VueWork'
-      }
+        title: 'Calendar - VueWork',
+      },
     },
     {
       path: '/admin',
@@ -43,18 +43,18 @@ const router = createRouter({
       meta: {
         title: 'Admin - VueWork',
         requiresAuth: true,
-        requiresAdmin: true
-      }
+        requiresAdmin: true,
+      },
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue'),
       meta: {
-        title: '404 - VueWork'
-      }
-    }
-  ]
+        title: '404 - VueWork',
+      },
+    },
+  ],
 })
 
 // Update page title on navigation

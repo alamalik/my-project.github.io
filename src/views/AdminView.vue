@@ -1,12 +1,12 @@
 <template>
   <div class="admin-view">
     <h1>Admin Dashboard</h1>
-    
+
     <div class="admin-placeholder">
       <div class="icon">⚙️</div>
       <h2>Admin Panel</h2>
       <p>User management and role-based access control will be implemented in Milestone 4</p>
-      
+
       <div class="feature-cards">
         <div class="feature-card">
           <h3>👥 User Management</h3>
